@@ -1,4 +1,4 @@
-import { loadMoreBtn } from './refs';
+import { moreButton } from './refs';
 import axios from 'axios';
 import { Notify } from 'notiflix';
 
@@ -11,27 +11,26 @@ const SAFESEARCH = 'safesearch=true&';
 const PER_PAGE = 'per_page=40&';
 const PAGE = 'page=';
 
-const DELAY = 300;
+const DELAY = 500;
 
 async function getImages(stringQuety, pageNum) {
   try {
     if (stringQuety) {
-      const { data: photo } = await axios.get(
-        `${KEY}q=${stringQuety}&${IMAGE_TYPE}${ORIENTAL}${SAFESEARCH}${PER_PAGE}${PAGE}${pageNum}`,
+      const { data: photos } = await axios.get(
+        `${KEY}q=${stringQuety}&image_type=photo&oriental=horizontal&safesearch=true&per_page=40&page=${pageNum}`,
       );
-      return photo;
+      if (stringQuety && photos.totalHits > 0) {
+        setTimeout(() => {
+          moreButton.classList.add('visible-button');
+        }, DELAY);
+      }
+      if (!photos.total) {
+        Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      } else if (pageNum === 1) {
+        Notify.success(`Hooray! We found totalHits images ${photos.totalHits}`);
+      }
+      return photos;
     }
-    if (stringQuety && photo.totalHits > 0) {
-      setTimeout(() => {
-        loadMoreBtn.classList.add('visible-button');
-      }, DELAY);
-    }
-    if (!photo.total) {
-      Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-    } else if (page === 1) {
-      Notify.success(`Hooray! We found totalHits images ${photo.totalHits}`);
-    }
-    return photo;
   } catch {
     Notify.info('Sorry, there are no images matching your search query. Please try again.');
   }
