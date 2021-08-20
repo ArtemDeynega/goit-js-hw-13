@@ -1,0 +1,26 @@
+.load-more {
+  display: none;
+
+  width: 400px;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+
+  background-color: #78ab78;
+  border-radius: 10px;
+  font-size: 30px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: white;
+    background-color: grey;
+  }
+}
+
+.visible-button {
+  display: block;
+}
